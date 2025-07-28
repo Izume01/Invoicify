@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -12,4 +6,117 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  USER
+  ADMIN
+  SUPER_ADMIN
+  GUEST
+  OWNER
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+}
+
+enum InvoiceAccessType {
+  VIEW
+  EDIT
+  DELETE
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  clerkId    String    @unique
+  name       String?
+  email      String?
+  imageUrl   String?
+  userType   UserType  @default(USER)
+
+  invoices   Invoice[]
+  accesses   InvoiceAccess[]
+}
+
+model Client {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  name        String
+  email       String
+  address     String
+  city        String
+  state       String
+  zip         String
+  country     String
+  phone       String
+  website     String
+  notes       String?
+
+  invoices    Invoice[]
+}
+
+model Invoice {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id])
+
+  clientId       Int
+  client         Client       @relation(fields: [clientId], references: [id])
+
+  invoiceNumber  String       @unique
+  invoiceDate    DateTime
+  dueDate        DateTime
+  status         InvoiceStatus @default(DRAFT)
+
+  items          InvoiceItem[]
+  emailDrafts    EmailDraft[]
+  accesses       InvoiceAccess[]
+}
+
+model InvoiceItem {
+  id          Int     @id @default(autoincrement())
+  invoiceId   Int
+  invoice     Invoice @relation(fields: [invoiceId], references: [id])
+
+  // Optional additions:
+  name        String
+  quantity    Int
+  unitPrice   Float
+  total       Float    // Can be a computed field in your codebase
+}
+
+model EmailDraft {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  invoiceId   Int
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+
+  subject     String
+  body        String
+}
+
+model InvoiceAccess {
+  id          Int                @id @default(autoincrement())
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  invoiceId   Int
+  invoice     Invoice            @relation(fields: [invoiceId], references: [id])
+
+  userId      Int
+  user        User               @relation(fields: [userId], references: [id])
+
+  accessType  InvoiceAccessType  @default(VIEW)
 }
