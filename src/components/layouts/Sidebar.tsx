@@ -16,7 +16,7 @@ const Sidebar = () => {
     const pathname = usePathname();
 
     return (
-        <aside className='bg-slate-900 text-slate-100 w-64 h-full p-4 fixed flex flex-col'>
+        <aside className='bg-slate-900 text-slate-100 w-64 h-full p-4 fixed flex flex-col border-r border-slate-300 shadow-2xl shadow-slate-900/50'>
             <div className='flex-shrink-0'>
                 <h2 className='text-2xl font-bold mb-4'>
                     <div className='flex items-center justify-between'>
