@@ -13,6 +13,12 @@
 # testing
 /coverage
 
+#env files
+.env
+
+#prisma
+prisma/migrations
+
 # next.js
 /.next/
 /out/
@@ -39,3 +45,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/app/generated/prisma
