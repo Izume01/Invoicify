@@ -1,25 +1,26 @@
 import React from 'react'
 import { getRegisterUser } from '@/components/hook/getRegisterUser'
-import Sidebar from '@/components/layouts/Sidebar';
+import Sidebar from '@/components/layouts/Sidebar'
 
-type childrenProp =  {
-    children: React.ReactNode;
+type ChildrenProp = {
+  children: React.ReactNode
 }
 
-const layout = async ({children} : childrenProp) => {
-    const { user, session } = await getRegisterUser();
+const Layout = async ({ children }: ChildrenProp) => {
+  const { user, session } = await getRegisterUser()
 
-    if (!user || !session) {
-        return <div>Error: User or session not found</div>;
-    }
+  if (!user || !session) {
+    return <div className='p-6 text-red-600'>Error: User or session not found</div>
+  }
+
   return (
-    <>
-        <Sidebar />
-        <main className='ml-64 p-2 min-h-screen bg-gray-50'>
-            {children}
-        </main>
-    </>
+    <div className='flex'>
+      <Sidebar />
+      <main className='ml-64 min-h-screen w-full bg-gray-50 px-4 sm:px-6 lg:px-8 py-6'>
+        {children}
+      </main>
+    </div>
   )
 }
 
-export default layout
+export default Layout
