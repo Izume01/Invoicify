@@ -1,11 +1,19 @@
 import Hero from "@/components/pages/Hero";
+import { syncUserAndCheckOnboarding } from "@/lib/syncUserAndCheckOnboarding";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+export default async function Home() {
 
-/**
- * Renders the home page with the main Hero section.
- *
- * Displays the `Hero` component within a container.
- */
-export default function Home() {
+  const user = await currentUser();
+
+  if (user) {
+    const {redirect : path} = await syncUserAndCheckOnboarding();
+    
+    if (path) {
+      redirect(path);
+    }
+  }
+
   return (
     <div>
       <Hero />

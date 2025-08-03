@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import {
     Card,
     CardContent,
@@ -8,6 +10,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { isOnboardingDone } from "@/app/actions/isOnboardingDone";
+
 
 const onboardingquestion = [
     {
@@ -42,18 +46,60 @@ const onboardingquestion = [
     },
 ];
 
-// For future we have to implement a backend  + a loader for the finishing logic 
-
 const Onboarding = () => {
+    const router = useRouter();
+    const {user , isLoaded} = useUser();
+    const [isChecking, setIsChecking] = useState(true);
+
+    React.useEffect(() => {
+        const checkOnboarding = async () => {
+            const done = await isOnboardingDone();
+            if (done) {
+                router.push('/dashboard');
+            } else {
+                setIsChecking(false);
+            }
+        };
+        checkOnboarding();
+    }, [router]);
+
+    if (isChecking) {
+        return null;
+    }
+
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<string[]>([]);
 
-    const nextStep = () => {
+    const nextStep = async () => {
         if (currentStep < onboardingquestion.length - 1) {
             setCurrentStep(currentStep + 1);
         } else {
-            // Submit logic or redirect
-            console.log("All answers submitted:", answers);
+            console.log("Onboarding completed with answers:", answers);
+
+            try {
+                const res =await fetch('/api/v1/onboarding' , {
+                    method : 'POST',
+                    headers : {
+                        'Content-Type': 'application/json',
+                    },
+                    body : JSON.stringify({ answer: answers }),
+                })
+
+                if (!res.ok) {
+                    throw new Error('Failed to submit answers');
+                }
+                
+                const data = await res.json();
+                console.log('Onboarding response:', data);
+
+                // Redirect to the dashboard or another page after successful submission
+                router.push('/dashboard');
+               
+                
+            } catch (error) {
+                console.error('Error submitting onboarding answers:', error);
+                alert('There was an error submitting your answers. Please try again later.');
+            }
         }
     };
 
@@ -81,9 +127,8 @@ const Onboarding = () => {
                         ></div>
                     ))}
                 </div>
-
                 <div className="my-6 sm:my-10">
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">Welcome, [First Name]! 👋</h1>
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">Welcome, {isLoaded ? user?.firstName  :"User"}! 👋</h1>
                     <p className="text-lg sm:text-xl lg:text-2xl mt-4 text-gray-300">
                         Let's get your invoicing workspace set up. It only takes a few seconds
                     </p>
