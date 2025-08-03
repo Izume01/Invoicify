@@ -9,7 +9,8 @@ const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Invoices', href: '/invoices', icon: FileText },
   { name: 'Clients', href: '/clients', icon: Users },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Settings', href: '/settings', icon: Settings }, 
+  // Add more items as needed
 ]
 
 const Sidebar = () => {
