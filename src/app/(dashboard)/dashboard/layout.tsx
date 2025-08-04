@@ -1,7 +1,7 @@
 import React from 'react'
-import { getRegisterUser } from '@/components/hook/getRegisterUser'
-import Sidebar from '@/components/layouts/Sidebar'
-import DashboardHeader from '@/components/layouts/DashboardHeader'
+import { getRegisterUser } from '@/features/auth/hooks/getRegisterUser'
+import Sidebar from '@/features/dashboard/layout/Sidebar'
+import DashboardHeader from '@/features/dashboard/components/DashboardHeader'
 
 type ChildrenProp = {
   children: React.ReactNode

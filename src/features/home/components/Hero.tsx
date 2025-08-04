@@ -1,7 +1,6 @@
 import React from 'react'
-import Navbar from '../layouts/Navbar'
-
-import { Button } from '../ui/button'
+import Navbar from '@/features/dashboard/layout/Navbar'
+import { Button } from '@/components/ui/button'
 const Hero = () => {
   return (
     <div className='bg-black min-h-screen'>

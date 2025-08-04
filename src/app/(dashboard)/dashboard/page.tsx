@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import DashboardHeader from '@/components/layouts/DashboardHeader'
-import HeaderLayout from '@/components/layouts/HeaderLayout'
+import DashboardHeader from '@/features/dashboard/components/DashboardHeader'
+import HeaderLayout from '@/features/dashboard/layout/HeaderLayout'
 const Page = () => {
   return (
     <div className="space-y-8">

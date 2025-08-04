@@ -10,7 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { isOnboardingDone } from "@/app/actions/isOnboardingDone";
+import { isOnboardingDone } from "@/features/onboarding/actions/isOnboardingDone";
 
 
 const onboardingquestion = [
