@@ -7,9 +7,9 @@ import { usePathname } from 'next/navigation'
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Invoices', href: '/invoices', icon: FileText },
-  { name: 'Clients', href: '/clients', icon: Users },
-  { name: 'Settings', href: '/settings', icon: Settings }, 
+  { name: 'Invoices', href: '/dashboard/invoices', icon: FileText },
+  { name: 'Clients', href: '/dashboard/clients', icon: Users },
+  { name: 'Settings', href: '/dashboard/settings', icon: Settings }, 
   // Add more items as needed
 ]
 

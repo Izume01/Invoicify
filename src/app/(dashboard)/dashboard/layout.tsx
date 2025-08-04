@@ -1,6 +1,7 @@
 import React from 'react'
 import { getRegisterUser } from '@/components/hook/getRegisterUser'
 import Sidebar from '@/components/layouts/Sidebar'
+import DashboardHeader from '@/components/layouts/DashboardHeader'
 
 type ChildrenProp = {
   children: React.ReactNode
@@ -17,6 +18,7 @@ const Layout = async ({ children }: ChildrenProp) => {
     <div className='flex'>
       <Sidebar />
       <main className='ml-64 min-h-screen w-full bg-gray-50 px-4 sm:px-6 lg:px-8 py-6'>
+        <DashboardHeader/>
         {children}
       </main>
     </div>
