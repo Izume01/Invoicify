@@ -50,6 +50,8 @@ const Onboarding = () => {
     const router = useRouter();
     const {user , isLoaded} = useUser();
     const [isChecking, setIsChecking] = useState(true);
+    const [currentStep, setCurrentStep] = useState(0);
+    const [answers, setAnswers] = useState<string[]>([]);
 
     React.useEffect(() => {
         const checkOnboarding = async () => {
@@ -66,9 +68,6 @@ const Onboarding = () => {
     if (isChecking) {
         return null;
     }
-
-    const [currentStep, setCurrentStep] = useState(0);
-    const [answers, setAnswers] = useState<string[]>([]);
 
     const nextStep = async () => {
         if (currentStep < onboardingquestion.length - 1) {

@@ -5,6 +5,7 @@ import { ChevronRight, Menu, LayoutDashboard, FileText, Users, Settings, LogOut 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Invoices', href: '/dashboard/invoices', icon: FileText },
