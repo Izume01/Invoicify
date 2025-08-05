@@ -28,6 +28,18 @@ enum InvoiceAccessType {
   DELETE
 }
 
+enum PaymentMethod {
+  BANK
+  PAYPAL
+  CRYPTO
+}
+
+enum PaymentTerms {
+  NET30
+  NET45
+  NET60
+}
+
 model User {
   id               Int             @id @default(autoincrement())
   createdAt        DateTime        @default(now())
@@ -73,36 +85,47 @@ model Client {
 }
 
 model Invoice {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int             @id @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  userId         Int
+  user           User            @relation(fields: [userId], references: [id])
 
-  clientId Int
-  client   Client @relation(fields: [clientId], references: [id])
+  clientId       Int
+  client         Client          @relation(fields: [clientId], references: [id])
 
-  invoiceNumber String        @unique
-  invoiceDate   DateTime
-  dueDate       DateTime
-  status        InvoiceStatus @default(DRAFT)
+  invoiceNumber  String          @unique
+  invoiceDate    DateTime
+  dueDate        DateTime
+  status         InvoiceStatus   @default(DRAFT)
 
-  items       InvoiceItem[]
-  emailDrafts EmailDraft[]
-  accesses    InvoiceAccess[]
+  paymentMethod  PaymentMethod?
+  paymentTerms   PaymentTerms?
+  notes          String?
+
+  cryptoAddress  String?         // For crypto payments
+  paypalEmail    String?         // For PayPal payments
+
+  bankAccountNumber String?      // For bank transfer
+  bankSwiftCode     String?
+  bankName          String?
+
+  items         InvoiceItem[]
+  emailDrafts   EmailDraft[]
+  accesses      InvoiceAccess[]
 }
 
 model InvoiceItem {
-  id        Int     @id @default(autoincrement())
-  invoiceId Int
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  id          Int      @id @default(autoincrement())
+  invoiceId   Int
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
 
-  // Optional additions:
-  name      String
-  quantity  Int
-  unitPrice Float
-  total     Float // Can be a computed field in your codebase
+  name        String
+  description String
+  quantity    Int
+  unitPrice   Float
+  total       Float // computed in code
 }
 
 model EmailDraft {
@@ -113,20 +136,20 @@ model EmailDraft {
   invoiceId Int
   invoice   Invoice @relation(fields: [invoiceId], references: [id])
 
-  subject String
-  body    String
+  subject   String
+  body      String
 }
 
 model InvoiceAccess {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int               @id @default(autoincrement())
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 
-  invoiceId Int
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId  Int
+  invoice    Invoice           @relation(fields: [invoiceId], references: [id])
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  userId     Int
+  user       User              @relation(fields: [userId], references: [id])
 
   accessType InvoiceAccessType @default(VIEW)
 }
