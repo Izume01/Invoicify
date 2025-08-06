@@ -4,6 +4,8 @@ import InvoiceList from '@/features/invoices/components/InvoiceList'
 import Link from 'next/link'
 
 const InvoicesPage = () => {
+
+
   return (
     <div className="w-full p-6 border-2 border-dotted rounded-2xl overflow-auto">
       <div className='flex  w-full justify-between items-center mb-6'>
