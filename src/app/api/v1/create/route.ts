@@ -7,8 +7,8 @@ import {
   CurrencySupported,
   InvoiceStatus,
   PaymentMethod,
-  InvoiceAccessType,
 } from "@prisma/client";
+import { grantCreatorAccess } from "@/lib/permissions";
 
 export async function POST(req: NextRequest) {
   console.log("Route hit");
@@ -114,6 +114,9 @@ export async function POST(req: NextRequest) {
         },
       },
     });
+
+    // Grant creator full access (although ownership already provides this)
+    await grantCreatorAccess();
 
     return NextResponse.json(
       { success: true, invoiceId: invoice.id },
