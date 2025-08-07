@@ -7,48 +7,11 @@ import { invoiceSchema } from "@/utils/zodSchema";
 export async function createInvoice(formData : FormData) {
     const {user , session} = await getRegisterUser();
 
-    // const parseData = invoiceSchema.parseAsync(Object.fromEntries(formData));
 
-    // const {
-    //     invoiceName,
-    //     invoiceNumber,
-    //     invoiceStatus,
-    //     currency,
-    //     invoiceDate,
-    //     invoiceDueDate,
-    //     paymentTerms,
-    //     paymentMethod,
-    //     fromName,
-    //     fromEmail,
-    //     fromAddress,
-    //     ClientName,
-    //     ClientEmail,
-    //     ClientAddress,
-    //     invoiceItems,
-    //     subtotal,
-    //     invoiceTotal,
-    //     invoiceNote
-    // } = await parseData;
+    if (!user || !session) {
+        throw new Error("User not authenticated");
+    }
 
-    // console.log("Parsed Data" , {
-    //     invoiceName,
-    //     invoiceNumber,
-    //     invoiceStatus,
-    //     currency,
-    //     invoiceDate,
-    //     invoiceDueDate,
-    //     paymentTerms,
-    //     paymentMethod,
-    //     fromName,
-    //     fromEmail,
-    //     fromAddress,
-    //     ClientName,
-    //     ClientEmail,
-    //     ClientAddress,
-    //     invoiceItems,
-    //     subtotal,
-    //     invoiceTotal,
-    //     invoiceNote
-    // });
-    
+    console.log("Data received from formData:", Object.fromEntries(formData));
+
 }

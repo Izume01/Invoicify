@@ -72,60 +72,90 @@ const CreateInvoices: React.FC = () => {
   }, [invoiceItemsList]);
 
 
-  function handleSubmit () {
-      setError({});
+  async function handleSubmit() {
+    setError({});
+    
+    // Debug: Log the dates before conversion
+    console.log("Date before conversion:", date);
+    console.log("Due Date before conversion:", dueDate);
+    
+    const formData = {
+      invoiceName,
+      invoiceNumber,
+      currency,
+      // Fix: Send Date objects instead of ISO strings
+      date: date || null,
+      dueDate: dueDate || null,
+      paymentTerms,
+      paymentMethod,
+      fromName,
+      fromEmail,
+      fromAddress,
+      clientName,
+      clientEmail,
+      clientAddress,
+      cryptoAddress,
+      paypalEmail,
+      accountNumber,
+      swiftCode,
+      bankName,
+      invoiceItemsList: invoiceItemsList.map(item => ({
+        itemName: item.itemName,
+        itemDescription: item.itemDescription || '',
+        itemQuantity: item.itemQuantity,
+        itemPrice: item.itemPrice
+      })),
+      subtotal: parseFloat(subtotal.toFixed(2)),
+      taxRate: parseFloat(taxRate.toFixed(2)),
+      taxAmount: parseFloat(taxAmount.toFixed(2)),
+      invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
+      invoiceNote
+    };
 
-      const formData = {
-        invoiceName,
-        invoiceNumber,
-        currency,
-        date: date?.toISOString() || null,
-        dueDate: dueDate?.toISOString() || null,
-        paymentTerms,
-        paymentMethod,
-        fromName,
-        fromEmail,
-        fromAddress,
-        clientName,
-        clientEmail,
-        clientAddress,
-        cryptoAddress,
-        paypalEmail,
-        accountNumber,
-        swiftCode,
-        bankName,
-        invoiceItemsList: invoiceItemsList.map(item => ({
-          itemName: item.itemName,
-          itemDescription: item.itemDescription || '',
-          itemQuantity: item.itemQuantity,
-          itemPrice: item.itemPrice
-        })),
-        subtotal: subtotal.toFixed(2),
-        taxRate: taxRate.toFixed(2),
-        taxAmount: taxAmount.toFixed(2),
-        invoiceTotal: invoiceTotal.toFixed(2),
-        invoiceNote
-      } 
+    // Debug: Log the dates
+    console.log("Form data dates:", {
+      date: formData.date,
+      dueDate: formData.dueDate
+    });
 
-      try {
-        console.log("Form Data Before Validation", formData);
-        
-        const validatedFormData =  invoiceSchema.parse(formData);
+    try {
+      console.log("Form Data Before Validation", formData);
+      
+      const validatedFormData = invoiceSchema.parse(formData);
+      
+      console.log("Validated Form Data", validatedFormData);
 
-        console.log("Validated Form Data", validatedFormData);
-      } catch (error) {
-          if (error instanceof z.ZodError) {
-            const fieldErrors: Record<string, string> = {};
-            error.issues.forEach(err => {
-              if (err.path.length > 0) {
-                // Handle nested paths for array items
-                const pathString = err.path.join('.');
-                fieldErrors[pathString] = err.message;
-              }
-            });
-            setError(fieldErrors);
-          }
+      const res = await fetch('/api/v1/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(validatedFormData),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to create invoice');
       }
+
+      const data = await res.json();
+      console.log("Invoice created successfully:", data);
+
+    } catch (error) {
+      console.log("Validation error:", error);
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.issues.forEach(err => {
+          if (err.path.length > 0) {
+            const pathString = err.path.join('.');
+            fieldErrors[pathString] = err.message;
+            console.log(`Validation error for ${pathString}:`, err.message);
+          }
+        });
+        setError(fieldErrors);
+      }
+    }
   }
 
   // Add a helper function to clear specific errors
