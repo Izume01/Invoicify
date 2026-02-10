@@ -1,33 +1,39 @@
-import React from 'react'
-import { Plus } from 'lucide-react'
-import InvoiceList from '@/features/invoices/components/InvoiceList'
-import Link from 'next/link'
+import { FileText, History } from "lucide-react";
 
-const InvoicesPage = () => {
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import InvoiceList from "@/features/invoices/components/InvoiceList";
 
-
+export default function InvoicesPage() {
   return (
-    <div className="w-full p-6 border-2 border-dotted rounded-2xl overflow-auto">
-      <div className='flex  w-full justify-between items-center mb-6'>
-        <div>
-          <h1 className="text-3xl font-bold ">Invoices</h1>
-          <p>Your invoices will appear here.</p>
-        </div>
+    <div className="space-y-5 pb-4">
+      <Card className="surface-panel rounded-3xl">
+        <CardContent className="space-y-5 py-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline">
+              <History className="size-3" />
+              Invoice History
+            </Badge>
+          </div>
 
-        {/* button */}
-        <button>
-          <Link href='/dashboard/invoices/create' className="text-white bg-black hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-3.5 mr-2 mb-2">
-            <Plus className="inline mr-2" />
-            Create Invoice
-          </Link>
-        </button>
-      </div>
+          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-semibold tracking-tight text-foreground">Invoice Library</h2>
+              <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+                Review generated invoices, compare statuses, and jump into previews or downloads without
+                leaving your workspace.
+              </p>
+            </div>
 
-      {/* Invoice List */}
+            <div className="surface-soft inline-flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-muted-foreground">
+              <FileText className="size-4 text-primary" />
+              Version snapshots are preserved automatically.
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <InvoiceList />
-
     </div>
-  )
+  );
 }
-
-export default InvoicesPage

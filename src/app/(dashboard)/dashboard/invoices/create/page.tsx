@@ -1,12 +1,5 @@
-import CreateInvoices from '@/features/invoices/components/CreateInvoices'
-import React from 'react'
+import { redirect } from "next/navigation";
 
-const page = () => {
-  return (
-    <div>
-        <CreateInvoices />
-    </div>
-  )
+export default function LegacyCreateInvoicePage() {
+  redirect("/dashboard#invoice-workspace");
 }
-
-export default page 

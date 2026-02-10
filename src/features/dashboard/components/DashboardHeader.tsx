@@ -1,29 +1,19 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { SignedIn, UserButton } from '@clerk/nextjs'
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
-const DashboardHeader = () => {
+export default function DashboardHeader() {
   return (
     <SignedIn>
-      <div className="border-b border-gray-200 pb-4 mb-6">
-        <div className='w-full'>
-          <div className='flex items-center justify-end px-10'>
-
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: {
-                    width: '34px',
-                    height: '34px',
-                  },
-                },
-              }} />
-          </div>
-        </div>
-      </div>
+      <header className="surface-soft mb-6 flex items-center justify-end rounded-2xl px-4 py-3">
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "h-8 w-8",
+            },
+          }}
+        />
+      </header>
     </SignedIn>
-  )
+  );
 }
-
-export default DashboardHeader

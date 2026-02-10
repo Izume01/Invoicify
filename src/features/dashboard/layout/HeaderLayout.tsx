@@ -1,24 +1,23 @@
-import React from 'react'
-import { usePathname } from 'next/navigation'
+"use client";
 
+import { usePathname } from "next/navigation";
 
-const HeaderLayout = () => {
-    const pathname = usePathname()
+export default function HeaderLayout() {
+  const pathname = usePathname();
+  
+  const getPageTitle = () => {
+    if (pathname === "/dashboard") return "Dashboard";
+    if (pathname.startsWith("/dashboard/invoices")) return "Invoices";
+    if (pathname.startsWith("/dashboard/clients")) return "Clients";
+    if (pathname.startsWith("/dashboard/settings")) return "Settings";
+    return "Dashboard";
+  };
 
-    const routeMap : Record<string , string> = {
-        '/dashboard/settings': 'Settings',
-        '/dashboard/clients': 'Clients',
-        '/dashboard/invoices': 'Invoices',
-        '/dashboard': 'Dashboard',
-    }
-
-    const title = routeMap[pathname] || 'Dashboard'
-
-    return (
-        <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{title}</h1>
-        </div>
-    )
+  return (
+    <div className="flex items-center gap-2">
+      <h1 className="text-lg font-semibold tracking-tight text-foreground">
+        {getPageTitle()}
+      </h1>
+    </div>
+  );
 }
-
-export default HeaderLayout

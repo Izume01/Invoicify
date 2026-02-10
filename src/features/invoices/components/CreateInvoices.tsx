@@ -170,7 +170,7 @@ const CreateInvoices: React.FC = () => {
   return (
     <div className='p-6  rounded-lg border-2 border-dotted'>
       <h1 className="text-2xl font-bold ">Create Invoice</h1>
-      <p className="mb-6 text-gray-500">Use the form below to create a new invoice.</p>
+      <p className="mb-6 text-muted-foreground">Use the form below to create a new invoice.</p>
 
       {/* YeHa Components */}
 
@@ -202,7 +202,7 @@ const CreateInvoices: React.FC = () => {
         <div className='flex flex-col space-y-2'>
           <Label className='mb-4'>Invoice Number</Label>
           <div className="flex items-center">
-            <span className='text-sm px-3 py-2 rounded rounded-r-none bg-zinc-200'>#</span>
+            <span className='bg-input text-muted-foreground rounded rounded-r-none px-3 py-2 text-sm'>#</span>
             <Input
               id='invoice-number'
               value={invoiceNumber}

@@ -1,42 +1,20 @@
-import { currentUser } from "@clerk/nextjs/server";
-import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+
+import { syncUserRecord } from "@/lib/user";
+
 export async function syncUserAndCheckOnboarding() {
-    const user = await currentUser();
+  const { userId } = await auth();
 
-    if(!user) {
-        return {
-            redirect : '/',
-            message: 'User not authenticated'
-        }
-    }
-
-    let dbUser = await prisma.user.findUnique({
-        where : {
-            clerkId: user.id
-        }
-    })
-
-
-
-    if(!dbUser) {
-        dbUser = await prisma.user.create({
-            data: {
-                clerkId: user.id,
-                email: user.emailAddresses[0]?.emailAddress || '',
-                name: user.fullName || '',
-                imageUrl: user.imageUrl || ''
-            }
-        })
-    }
-
-    if(!dbUser.IsonBoardingDone) {
-        return {
-            redirect: '/onboarding',
-            message: 'User onboarding not complete'
-        }
-    }
-
+  if (!userId) {
     return {
-        redirect : '/dashboard',
-    }
+      redirect: "/",
+      message: "User not authenticated",
+    };
+  }
+
+  await syncUserRecord(userId);
+
+  return {
+    redirect: "/dashboard",
+  };
 }
